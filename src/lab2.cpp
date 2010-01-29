@@ -11,25 +11,26 @@ int main()
 
 
 	int num = -1;
-	do
+	try
 	{
-		try
-		{
-			cout << "There are " << db.GetNumCards() << " numbers of cards" << endl;
-			cout << "Select a card: ";
-			cin >> num;
 
-			if( num == -1)
-				break;
+		do
+		{			int nums = db.GetNumCards();
+		cout << "There are " << nums << " numbers of cards" << endl;
+		cout << "Select a card: ";
+		cin >> num;
+
+		if( num == -1)
+			break;
 
 
-			auto_ptr<Card> card = db.GetCard(num);      
-		}
-		catch(std::exception & ex)
-		{
-			cerr << ex.what() << endl;
-		}
-	}while(num != -1);
+		auto_ptr<Card> card = db.GetCard(num);      
+		}while(num != -1);
+	}
+	catch(std::exception & ex)
+	{
+		cerr << ex.what() << endl;
+	}
 
 	cin.get();
 	return 0;
