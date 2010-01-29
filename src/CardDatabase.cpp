@@ -3,12 +3,14 @@
 #include <stdexcept>
 #include <sstream>
 
+
 using namespace std;
 using namespace asio;
 using asio::ip::tcp;
 
 CardDatabase::CardDatabase(const std::string serverName)
-   : _socket(io_service)
+   : _socket(io_service) , 
+    net_stream(serverName,"7000")
 {
   int port = 7000;
 
@@ -19,6 +21,12 @@ CardDatabase::CardDatabase(const std::string serverName)
   tcp::resolver::iterator iterator = resolver.resolve(query);
 
   _socket.connect(*iterator);
+  if(!_socket.is_open())
+	  throw std::runtime_error("can't connect");
+
+  if(!net_stream.good())
+  		throw std::runtime_error("can't connect");
+
 }
 
 CardDatabase::~CardDatabase()
@@ -30,20 +38,22 @@ CardDatabase::~CardDatabase()
 
 std::string CardDatabase::readLine()
 {
+	std::string result;
+
    //Get line
    cerr << "Receiving start, " << endl;
 
-   static asio::streambuf b;
+   /*static asio::streambuf b;
    asio::read_until(_socket, b, '\n');
    std::istream is(&b);
-   std::string result;
    std::getline(is, result);
-   
+   */
 
+   getline(net_stream, result);
    
    cerr << "Received: \"" << result << "\"" << endl;
 
-   for(int i=0;i < result.length();++i)
+   for(size_t i=0;i < result.length();++i)
    {
       if(result[i] == '\0')
          result.erase(i,1);
@@ -61,7 +71,6 @@ int CardDatabase::readInt()
 {
    std::istringstream ss( readLine() );
    int result = -1;
-
    ss >> result;
    return result;
 }
@@ -70,11 +79,9 @@ void CardDatabase::writeLine(const std::string & s)
 {
    std::string str(s);
 
-   cerr << "Sending: \"" << str << "\\n\"\n";
-   str.append("\n");
+   cerr << "sending \"" << s << "\\n\"\n";
+   net_stream << s << "\n";
 
-   asio::write(_socket, buffer(str));
-   
 //   fprintf(fsocket,"%s\n",str.c_str());
 //   fflush(fsocket);
    cerr << "sent\n";

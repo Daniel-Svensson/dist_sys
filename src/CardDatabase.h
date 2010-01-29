@@ -13,6 +13,7 @@ class CardDatabase
    //Socket
    asio::io_service io_service;
    tcp::socket _socket;
+   asio::ip::tcp::iostream net_stream; 
    
    CardDatabase(const CardDatabase&);
    CardDatabase &operator=(const CardDatabase&);
