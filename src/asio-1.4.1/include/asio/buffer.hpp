@@ -435,7 +435,7 @@ public:
     // MSVC's string iterator checking may crash in a std::string::iterator
     // object's destructor when the iterator points to an already-destroyed
     // std::string object, unless the iterator is cleared first.
-    iter_ = Iterator();
+//    iter_ = Iterator();
 #endif // BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
   }
 

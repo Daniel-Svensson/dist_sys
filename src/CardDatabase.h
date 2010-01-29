@@ -1,34 +1,22 @@
 #ifndef CARD_DATABASE_H
 #define CARD_DATABASE_H
 
-#include <asio.hpp>
 #include "Card.h"
 #include <memory>
+#include "NetworkBase.h"
 
-using asio::ip::tcp;
-
-
-class CardDatabase
+class CardDatabase : public NetworkBase
 {
-   //Socket
-   asio::io_service io_service;
-   tcp::socket _socket;
-   
-   CardDatabase(const CardDatabase&);
-   CardDatabase &operator=(const CardDatabase&);
 
 protected:
-   int readInt();
-   std::string readLine();
-   void writeLine(const std::string & str);
 public:
    CardDatabase(const std::string serverName = "mir41.ida.liu.se");
    ~CardDatabase();
-//   int getCardsNumber(void);
+
+   int GetNumCards();
 
    std::auto_ptr<Card> GetCard(int cardNumber);
 
-   int GetNumCards();
 //   void dump(void);
 };
 
