@@ -5,8 +5,36 @@
 
 using namespace std;
 
-int main()
+#include <iostream> 
+#include <string> 
+#include <asio.hpp> 
+ 
+int webb(int argc, char* argv[]) { 
+    std::string host = argc > 1 ? argv[1] : "mir41.ida.liu.se"; 
+    asio::ip::tcp::iostream stream(host, "7000"); 
+    if (stream) { 
+//        stream << "getCardsNumber\n" << flush;
+//		stream << "getCardsNumber\n" << flush;
+		stream << "getCardInfo 1\n" << flush;
+		Sleep(100);
+		stream << "exit\n"; 
+        std::string line; 
+		Sleep(100);
+		while(std::getline(stream, line)) 
+		{
+            std::cout << line << std::endl; 
+			if(line.find('\0') != string::npos)
+				cerr << "hitta null";
+		}
+
+    } 
+    return 0; 
+}
+
+int main(int argc, char* argv[]) 
 {
+	webb(argc,argv);
+
    CardDatabase db;
 
 

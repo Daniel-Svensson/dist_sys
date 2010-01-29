@@ -17,6 +17,8 @@ protected:
    std::string readLine();
    void writeLine(const std::string & str);
 
+   //Att använda då server lägger in null i slutet av varje meddelande.
+   void discardNULL();
 public:
 	NetworkBase(std::string host, std::string port);
 	~NetworkBase(void);

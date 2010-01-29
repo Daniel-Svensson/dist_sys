@@ -82,3 +82,10 @@ void NetworkBase::writeLine(const std::string & s)
    cerr << "sent\n";
 }
 
+//Att använda då server lägger in null i slutet av varje meddelande.
+void NetworkBase::discardNULL()
+{
+	std::istream is(&b);
+	if(is.peek() == '\0')
+		is.ignore();
+}
