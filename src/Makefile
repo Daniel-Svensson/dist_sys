@@ -1,6 +1,6 @@
 
 CCC = g++
-CCFLAGS = -Wall -Wextra -ansi
+CCFLAGS =  -I ./asio-1.4.1/include -g 
 LIBS = -lsocket -lxnet 
 LAB2_OBJ = Card.o CardDatabase.o
 

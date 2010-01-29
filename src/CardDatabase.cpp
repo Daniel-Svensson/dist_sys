@@ -1,85 +1,83 @@
 #include "CardDatabase.h"
 #include <iostream>
+#include <stdexcept>
 #include <sstream>
 
 using namespace std;
-
-#include <memory.h>
-#include <string.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <netdb.h>
+using namespace asio;
+using asio::ip::tcp;
 
 CardDatabase::CardDatabase(const std::string serverName)
-   : sockfd(0), fsocket(0)
+   : _socket(io_service)
 {
-  struct sockaddr_in serv_addr;
-  struct hostent *host_ptr;
   int port = 7000;
- 
-  /* get the address of the host */
-  if((host_ptr = gethostbyname(serverName.c_str())) == NULL) {
-     perror("gethostbyname error");
-     exit(1);
-  }
-  
-  if(host_ptr->h_addrtype !=  AF_INET) {
-     perror("unknown address type");
-     exit(1);
-  }
-  
-  memset((char *) &serv_addr, 0, sizeof(serv_addr));
-  serv_addr.sin_family = AF_INET;
-  serv_addr.sin_addr.s_addr = 
-     ((struct in_addr *)host_ptr->h_addr_list[0])->s_addr;
-  serv_addr.sin_port = htons(port);
-  
 
-  /* open a TCP socket */
-  if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-     perror("can't open stream socket");
-     exit(1);
-  }
+  cerr << "Connecting to " << serverName << " port " << port << endl;
 
-  /* connect to the server */    
-  if(connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-     perror("can't connect to server");
-     exit(1);
-  }
+  tcp::resolver resolver(io_service);
+  tcp::resolver::query query(tcp::v4(), serverName.c_str(), "7000");
+  tcp::resolver::iterator iterator = resolver.resolve(query);
 
-  fsocket = fdopen(sockfd,"rw+");
-  
+  _socket.connect(*iterator);
 }
 
 CardDatabase::~CardDatabase()
 {
-   fclose(fsocket);
-   close(sockfd);
+   _socket.close();
 }
 
 
 
 std::string CardDatabase::readLine()
 {
-   char buffer[512];
-   int len = 0;
-
    //Get line
-   fgets( buffer, sizeof(buffer) , fsocket );
-   buffer[len] = 0;
+   cerr << "Receiving start, " << endl;
 
-   cerr << "Received: " << buffer;
-   return std::string(buffer);
+   static asio::streambuf b;
+   asio::read_until(_socket, b, '\n');
+   std::istream is(&b);
+   std::string result;
+   std::getline(is, result);
+   
+
+   
+   cerr << "Received: \"" << result << "\"" << endl;
+
+   for(int i=0;i < result.length();++i)
+   {
+      if(result[i] == '\0')
+         result.erase(i,1);
+   }
+
+   if( result.find("ERROR:") != std::string::npos)
+   {      
+      throw std::runtime_error(result);
+   }
+
+   return result;
 }
 
-void CardDatabase::writeLine(const std::string & str)
+int CardDatabase::readInt()
 {
-   cerr << "Sending: " << str << "\\n\n";   
-   fprintf(fsocket, "%s\n",str.c_str());
+   std::istringstream ss( readLine() );
+   int result = -1;
+
+   ss >> result;
+   return result;
+}
+
+void CardDatabase::writeLine(const std::string & s)
+{
+   std::string str(s);
+
+   cerr << "Sending: \"" << str << "\\n\"\n";
+   str.append("\n");
+
+   asio::write(_socket, buffer(str));
+   
+//   fprintf(fsocket,"%s\n",str.c_str());
+//   fflush(fsocket);
+   cerr << "sent\n";
 }
 
 
@@ -98,8 +96,11 @@ std::auto_ptr<Card> CardDatabase::GetCard(int id)
    res->FileName = readLine();  //Filename
    res->URL = readLine();      //URL
    res->ThumbURL = readLine(); //thumb URL
-   //read x, y,w ,h 
-   fscanf(fsocket,"%d%d%d%d", res->x, res->y, res->w , res->h );
+   //read x, y,w ,h
+   res->x = readInt();
+   res->y = readInt();
+   res->w = readInt();
+   res->h = readInt();
 
    return res;
 }
@@ -109,8 +110,5 @@ int CardDatabase::GetNumCards()
    const std::string GET_NUM_CARDS = "getCardsNumber";
    writeLine(GET_NUM_CARDS);
 
-   int nums = 42;
-   fscanf(fsocket,"%d%d%d%d", nums );
-
-   return nums;
+   return readInt();
 }

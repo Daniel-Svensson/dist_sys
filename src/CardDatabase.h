@@ -1,19 +1,24 @@
 #ifndef CARD_DATABASE_H
 #define CARD_DATABASE_H
 
+#include <asio.hpp>
 #include "Card.h"
 #include <memory>
+
+using asio::ip::tcp;
+
 
 class CardDatabase
 {
    //Socket
-   int sockfd;
-   FILE *fsocket;
-
+   asio::io_service io_service;
+   tcp::socket _socket;
+   
    CardDatabase(const CardDatabase&);
    CardDatabase &operator=(const CardDatabase&);
 
 protected:
+   int readInt();
    std::string readLine();
    void writeLine(const std::string & str);
 public:
