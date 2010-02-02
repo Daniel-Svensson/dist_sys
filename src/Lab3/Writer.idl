@@ -1,0 +1,9 @@
+
+interface Writer
+{
+	void setCard(in string inputFileName, 
+		in short x, in short y, in short width, in short height);
+	void setMessage(in string message);
+	string writeCard(in string outputFileName);
+};
+

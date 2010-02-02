@@ -37,10 +37,15 @@ Card.o:  Card.cpp Card.h
 %.o: %.cpp %.h
 	$(CCC) $(CCFLAGS) -c $<
 
-%.idl: %.idl
-	rm -f %.cpp %.h
-	rm -f %_skel.cpp %_skel.h
-	$(IDL) --no-type-codes $<
+Writer.cpp Writer.h: Writer.idl
+	rm -f Writer.cpp Writer.h
+	$(IDL) --no-type-codes Writer.idl
+	rm -f Writer_skel.cpp Writer_skel.h
+
+Database.cpp Database.h: Database.idl
+	rm -f Database.cpp Database.h
+	$(IDL) --no-type-codes Database.idl
+	rm -f Database_skel.*
 
 clean:
 	rm -f *.o
