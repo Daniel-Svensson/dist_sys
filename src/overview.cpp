@@ -14,15 +14,36 @@ using namespace std;
 
 int main()
 {
-   cout << "Content-type: text/html" << "\n\n";
+  std::auto_ptr<Card> res;
+  CardDatabase db;
+  int cardsNum; //Store total number of cards on server
 
-   const char * arguments = getenv("QUERY_STRING");
+  cout << "Content-type: text/html" << "\n\n";
 
-   cout << "<HTML><BODY>"                      << endl
-        << "The parameters are: " << arguments << endl
-        << "</BODY></HTML>" << endl;
+  cardsNum = db.GetNumCards(); //Get total number of cards
+  
+  const char * arguments = getenv("QUERY_STRING");
+   
+  cout << "<HTML><BODY>"                      << endl
+       << "The parameters are: " << arguments << endl
+       << ""                                  << endl;
+
+  //fetch all cards
+  for (int i = 1; i <= cardsNum; i++)
+    {
+      res = db.GetCard(i);
+      
+
+      cout << "<DIV style=\"border: red 1px dashed; margin: 1em; min-height: 150px; float: left;\"><A HREF=\"viewimage.cgi?id=" << i << "\">"
+	"<IMG SRC=\"" << res->ThumbURL << "\" ALT=\"" << res->Name << "\"</A><BR><B>" << res->Name << "</B></DIV>" << endl;
+      
+    }
+
+
+
+  cout   << "</BODY></HTML>" << endl;
 
    
 
-   return 0;
+  return 0;
 }
