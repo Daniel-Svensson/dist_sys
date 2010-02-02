@@ -42,10 +42,11 @@ int main()
       }
 
       
-   cout << "<FORM METHOD=\"GET\" ACTION=\"createcard.cgi?id=" << id << "\">\n"
+   cout << "<FORM METHOD=\"GET\" ACTION=\"createcard.cgi\">\n"
+        << " <INPUT NAME=\"id\" TYPE=HIDDEN VALUE=\"" << id << "\">\n"
         << " <TEXTAREA NAME=\"message\" ROWS=6 COLS=60> "
         <<   "Write your message here.."
-        << " </TEXTAREA>\n"
+        << " </TEXTAREA> <BR />\n"
         << " <INPUT TYPE=\"submit\" /> \n"
         << "</FORM>\n";
    

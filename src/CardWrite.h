@@ -4,13 +4,15 @@
 #include "Card.h"
 #include "NetworkBase.h"
 #include <string>
-#include <asio.hpp>
 
 class CardWrite : public NetworkBase
 {
 public:
   CardWrite();
-  void SendCard(std::auto_ptr<Card> card);
+
+   //Write a ccard
+   // return url of written card
+   std::string WriteCard(std::auto_ptr<Card> card, const std::string & message);
 };
 
 #endif 
