@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "CardDatabase.h"
+#include "CardWrite.h"
 #include "Card.h"
 
 using namespace std;
@@ -16,10 +17,10 @@ int webb(int argc, char* argv[]) {
 //        stream << "getCardsNumber\n" << flush;
 //		stream << "getCardsNumber\n" << flush;
 		stream << "getCardInfo 1\n" << flush;
-		Sleep(100);
+		  //	Sleep(100));
 		stream << "exit\n"; 
         std::string line; 
-		Sleep(100);
+	  //     Sleep(100);
 		while(std::getline(stream, line)) 
 		{
             std::cout << line << std::endl; 
@@ -33,11 +34,11 @@ int webb(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) 
 {
-	webb(argc,argv);
+  //	webb(argc,argv);
 
    CardDatabase db;
-
-
+   auto_ptr<Card> rcv_card;
+   CardWrite cw;
    int num = -1;
    do
    {
@@ -49,9 +50,14 @@ int main(int argc, char* argv[])
       if( num == -1)
          break;
      
-      auto_ptr<Card> card = db.GetCard(num);      
-   }while(num != -1);
-             
+      auto_ptr<Card> card = db.GetCard(num);
+      rcv_card = card;
+      // CardWrite();
+   }while(false); //while(num != -1);
+   CardWrite(); //make a connection to Card Writer server
+   
+   //Send the received card info from Card DB server to Card Writer Server
+   cw.SendCard(rcv_card); 
    
    return 0;
 }
