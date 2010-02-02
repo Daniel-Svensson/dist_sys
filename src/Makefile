@@ -2,7 +2,7 @@
 CCC = g++
 CCFLAGS =  -I ./asio-1.4.1/include -g 
 LIBS = -lsocket -lxnet 
-LAB2_OBJ = Card.o CardDatabase.o NetworkBase.o
+LAB2_OBJ = Card.o CardDatabase.o NetworkBase.o CardWrite.o
 
 all: lab2
 
@@ -14,6 +14,9 @@ CardDatabase.o:  CardDatabase.cpp CardDatabase.h NetworkBase.h Card.h
 
 NetworkBase.o:  NetworkBase.cpp NetworkBase.h
 	$(CCC) $(CCFLAGS) -c NetworkBase.cpp
+
+CardWrite.o:  CardWrite.cpp CardWrite.h
+	$(CCC) $(CCFLAGS) -c CardWrite.cpp
 
 Card.o:  Card.cpp Card.h
 	$(CCC) $(CCFLAGS) -c Card.cpp
