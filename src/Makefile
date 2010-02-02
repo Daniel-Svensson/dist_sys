@@ -10,13 +10,13 @@ LAB2_OBJ = Card.o CardDatabase.o NetworkBase.o CardWrite.o arg.o
 all: overview viewimage createcard
 
 overview: overview.cpp $(O_OBJ)
-	$(CCC) $(CCFLAGS) $(LIBS) $(O_OBJ) overview.cpp  -o overview.cgi
+	$(CCC) $(CCFLAGS) $(LIBS) $(O_OBJ) overview.cpp  -o ../overview.cgi
 
 viewimage: viewimage.cpp $(V_OBJ)
-	$(CCC) $(CCFLAGS) $(LIBS) $(V_OBJ) viewimage.cpp  -o viewimage.cgi
+	$(CCC) $(CCFLAGS) $(LIBS) $(V_OBJ) viewimage.cpp  -o ../viewimage.cgi
 
 createcard: createcard.cpp $(C_OBJ)
-	$(CCC) $(CCFLAGS) $(LIBS) $(C_OBJ) createcard.cpp  -o createcard.cgi
+	$(CCC) $(CCFLAGS) $(LIBS) $(C_OBJ) createcard.cpp  -o ../createcard.cgi
 
 lab2: lab2.cpp $(LAB2_OBJ)
 	$(CCC) $(CCFLAGS) $(LIBS) $(LAB2_OBJ) lab2.cpp  -o lab2 
