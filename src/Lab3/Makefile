@@ -1,11 +1,17 @@
 
 CCC = g++
-CCFLAGS =  -g
-LIBS = -lsocket -lxnet 
+ORBDIR		= /home/TDDD25/ORB4
+CCFLAGS =  -g -fPIC -Wall -I. -I$(ORBDIR)/include
+LIBS =  -L$(ORBDIR)/lib -lsocket -lxnet -lOB -lJTC -lnsl -ldl -lposix4 -lpthread
+
+
 O_OBJ = Card.o CardDatabase.o arg.o
 V_OBJ = Card.o CardDatabase.o arg.o
 C_OBJ = Card.o CardDatabase.o CardWrite.o arg.o
-LAB2_OBJ = Card.o CardDatabase.o CardWrite.o arg.o
+
+
+IDL		= $(ORBDIR)/bin/idl
+
 
 all: overview viewimage createcard
 
@@ -27,7 +33,14 @@ CardWrite.o:  CardWrite.cpp CardWrite.h
 Card.o:  Card.cpp Card.h
 	$(CCC) $(CCFLAGS) -c Card.cpp
 
-arg.o : arg.cpp arg.h
-	$(CCC) $(CCFLAGS) -c arg.cpp
+
+%.o: %.cpp %.h
+	$(CCC) $(CCFLAGS) -c $<
+
+%.idl: %.idl
+	rm -f %.cpp %.h
+	rm -f %_skel.cpp %_skel.h
+	$(IDL) --no-type-codes $<
+
 clean:
 	rm -f *.o
