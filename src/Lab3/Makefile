@@ -1,22 +1,22 @@
 
 CCC = g++
-ORBDIR		= /home/TDDD25/ORB4
+ORBDIR	= /home/TDDD25/ORB4
 CCFLAGS =  -g -fPIC -Wall -I. -I$(ORBDIR)/include
-LIBS =  -L$(ORBDIR)/lib -lsocket -lxnet -lOB -lJTC -lnsl -ldl -lposix4 -lpthread
+LIBS =  -L$(ORBDIR)/lib -lsocket -lxnet -lOB -lJTC -lnsl -ldl -lposix4 -lpthread -lCosNaming
 
-
-O_OBJ = Card.o CardDatabase.o arg.o
-V_OBJ = Card.o CardDatabase.o arg.o
-C_OBJ = Card.o CardDatabase.o CardWrite.o arg.o
+COMMON_OBJ = arg.o Writer.o Database.o
+O_OBJ = $(COMMON_OBJ)
+V_OBJ = $(COMMON_OBJ)
+C_OBJ = $(COMMON_OBJ)
 
 
 IDL		= $(ORBDIR)/bin/idl
 
 
-all: overview viewimage createcard
+all: lab3
 
-overview: overview.cpp $(O_OBJ)
-	$(CCC) $(CCFLAGS) $(LIBS) $(O_OBJ) overview.cpp  -o ../../overview.cgi
+lab3: lab3.cpp $(O_OBJ)
+	$(CCC) $(CCFLAGS) $(LIBS) $(O_OBJ) lab3.cpp  -o lab3
 
 viewimage: viewimage.cpp $(V_OBJ)
 	$(CCC) $(CCFLAGS) $(LIBS) $(V_OBJ) viewimage.cpp  -o ../../viewimage.cgi
@@ -24,14 +24,11 @@ viewimage: viewimage.cpp $(V_OBJ)
 createcard: createcard.cpp $(C_OBJ)
 	$(CCC) $(CCFLAGS) $(LIBS) $(C_OBJ) createcard.cpp  -o ../../createcard.cgi
 
-CardDatabase.o:  CardDatabase.cpp CardDatabase.h Card.h
-	$(CCC) $(CCFLAGS) -c CardDatabase.cpp
+Database.o:  Database.cpp Database.h
+	$(CCC) $(CCFLAGS) -c Database.cpp
 
-CardWrite.o:  CardWrite.cpp CardWrite.h
-	$(CCC) $(CCFLAGS) -c CardWrite.cpp
-
-Card.o:  Card.cpp Card.h
-	$(CCC) $(CCFLAGS) -c Card.cpp
+Writer.o:  Writer.cpp Writer.h
+	$(CCC) $(CCFLAGS) -c Writer.cpp
 
 
 %.o: %.cpp %.h
