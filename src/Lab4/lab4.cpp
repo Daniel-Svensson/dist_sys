@@ -1,8 +1,11 @@
 #include <OB/CORBA.h>
 #include <OB/CosNaming.h> 
 
+#include "Database_impl.h"
+#include "Database_skel.h"
 #include "Database.h"
-#include "Writer.h"
+
+
 
 #include <iostream>
 #include <iomanip>
@@ -16,13 +19,62 @@ using namespace std;
 
 int run(CORBA::ORB_var orb)
 {
+   //
+   // Resolve Root POA
+   //
+   CORBA::Object_var poaObj = orb -> resolve_initial_references("RootPOA");
+   PortableServer::POA_var rootPOA = PortableServer::POA::_narrow(poaObj);
+    
+   //
+   // Get a reference to the POA manager
+   //
+   PortableServer::POAManager_var manager = rootPOA -> the_POAManager();
+    
+   //
+   // Create implementation object
+    //
+   Database_impl* databaseImpl = new Database_impl(orb, rootPOA);
+   PortableServer::ServantBase_var servant = databaseImpl;
+   Database_var database = databaseImpl -> _this();
+   databaseImpl->LoadCards("cards.database");
+
+ 
+    //Add to name service
+   //Get name service ref
    CORBA::Object_var obj = orb -> resolve_initial_references("NameService");
+   CosNaming::NamingContext_var nc = CosNaming::NamingContext::_narrow(obj.in());
+   //Bind
+   CosNaming::Name dbName;
+   dbName.length(1);
+   dbName[0].id = CORBA::string_dup("Database");
+   dbName[0].kind = CORBA::string_dup("dansv693");
+
+   try
+   {
+      nc -> bind(dbName, database.in());
+   }
+   catch(...)
+   {
+      nc->rebind(dbName, database.in());
+   }
+   
+   
+    //
+    // Run implementation
+    //
+    manager -> activate();
+    orb -> run();
+
+    return EXIT_SUCCESS;
+}
+
+/*   CORBA::Object_var obj = orb -> resolve_initial_references("NameService");
    CosNaming::NamingContext_var nc = CosNaming::NamingContext::_narrow(obj.in());
    
    CosNaming::Name dbName;
    dbName.length(1);
    dbName[0].id = CORBA::string_dup("Database");
-   dbName[0].kind = CORBA::string_dup("dansv693");
+   dbName[0].kind = CORBA::string_dup("trapo");
    CORBA::Object_var dbObj = nc -> resolve(dbName);
    Database_var db = Database::_narrow(dbObj.in());
 
@@ -143,7 +195,7 @@ int run(CORBA::ORB_var orb)
 
   return 0;
 }
-
+*/
 
 int main(int argc, char* argv[])
 {
@@ -182,48 +234,3 @@ int main(int argc, char* argv[])
     return status;
 }
 
-/*
-int
-run(CORBA::ORB_ptr orb, int argc, char* argv[])
-{
-    //
-    // Get "hello" object
-    //
-    CORBA::Object_var obj;
-
-    try
-    {
-        obj  = orb -> string_to_object("relfile:/Hello.ref");
-    }
-    catch(const CORBA::BAD_PARAM&)
-    {
-    }
-
-    if(CORBA::is_nil(obj))
-    {
-	cerr << argv[0] << ": cannot read IOR from Hello.ref" << endl;
-	return EXIT_FAILURE;
-    }
-    
-    Hello_var hello = Hello::_narrow(obj);
-    assert(!CORBA::is_nil(hello));
-    
-    //
-    // Main loop
-    //
-    cout << "Enter 'h' for hello, 's' for shutdown or 'x' for exit:\n";
-    char c;
-    do
-    {
-	cout << "> ";
-	cin >> c;
-	if(c == 'h')
-	    hello -> say_hello();
-	else if(c == 's')
-	    hello -> shutdown();
-    }
-    while(cin.good() && c != 'x');
-
-    return EXIT_SUCCESS;
-}
-*/

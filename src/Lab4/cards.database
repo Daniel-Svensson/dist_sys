@@ -1,0 +1,35 @@
+#################################################################
+#                                                               #
+#     Lines starting with '#' are considered comments.          #
+#     The rest of the lines are structured as following:        #
+#                                                               #
+# <Title>, <FileName>, <ThumbnailFileName>, X, Y, Height, Width #
+#                                                               #
+#################################################################
+Autumn,autumn.jpg,autumn_t.jpg,20,400,500,490
+Three Bulls and Peasant,bulls.jpg,bulls_t.jpg,12,370,380,490
+Cave,cave.jpg,cave_t.jpg,300,20,590,390
+Field at Sunset,field_sunset.jpg,field_sunset_t.jpg,20,350,480,490
+Two Fishermen,fishermen.jpg,fishermen_t.jpg,60,450,340,590
+Forest,forest.jpg,forest_t.jpg,10,370,500,490
+Peasants in the Hay Field,hay.jpg,hay_t.jpg,10,390,535,490
+Hill with Three Trees,hill.jpg,hill_t.jpg,10,380,530,490
+Hills,hills.jpg,hills_t.jpg,15,370,490,490
+White Horse in the Mountains,horse.jpg,horse_t.jpg,10,390,500,490
+Hut in the Mountains,hut.jpg,hut_t.jpg,10,480,480,590
+Hut in the Forest,hut_2.jpg,hut_2_t.jpg,10,350,490,540
+Lake and Forest,lake.jpg,lake_t.jpg,10,320,490,490
+Sunset Seen from the Mountains,mountains_sunset.jpg,mountains_sunset_t.jpg,10,360,480,490
+Road in the Mountains,mountain_road.jpg,mountain_road_t.jpg,290,20,530,380
+Mud Volcanos,mud_volcanos.jpg,mud_volcanos_t.jpg,20,415,490,490
+Mud Rivers,mud_volcanos_2.jpg,mud_volcanos_2_t.jpg,270,20,540,370
+River in the Forest,river.jpg,river_t.jpg,60,410,450,490
+River at Sunset,river_sunset.jpg,river_sunset_t.jpg,320,20,340,370
+Sea Shore,sea.jpg,sea_t.jpg,53,400,460,490
+Sunrise at Sea,sea_sunrise.jpg,sea_sunrise_t.jpg,73,400,430,490
+Sheep during Winter,sheep.jpg,sheep_t.jpg,270,20,530,340
+Sphinx,sphinx.jpg,sphinx_t.jpg,10,380,490,540
+Summer,summer.jpg,summer_t.jpg,10,380,490,490
+Sunset,sunset.jpg,sunset_t.jpg,20,350,490,480
+Wheat Field,wheat_field.jpg,wheat_field_t.jpg,10,370,490,480
+Winter,winter.jpg,winter_t.jpg,265,15,540,350

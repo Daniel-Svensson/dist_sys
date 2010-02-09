@@ -1,0 +1,13 @@
+
+interface Database
+{
+	short getCardsNumber();
+	
+	string getCardName(in short cardNumber);	
+	string getCardFile(in short cardNumber);	
+	string getCardURL(in short cardNumber);	
+	string getCardThumb(in short cardNumber);
+	boolean getCardArea(in short cardNumber, out short x, out short y, 
+		out short width, out short height);
+};
+
