@@ -1,0 +1,21 @@
+// **********************************************************************
+//
+// Copyright (c) 2002
+// IONA Technologies, Inc.
+// Waltham, MA, USA
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+interface Lock
+{
+	// The token is represented as a sequence, which equals an unbounded array.
+	// (and can be treated as such)
+	typedef sequence<long> token_type;
+	
+	// Methods accessible via CORBA
+	void request_token(in short id, in long logical_time);
+	void acquire_token(in token_type token);
+	void print_message(in short id);
+};
